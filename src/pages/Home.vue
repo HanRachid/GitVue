@@ -1,19 +1,25 @@
 <script setup lang="ts">
     import {ref} from 'vue';
-    import { githubOauth, logOut , getSession, fetchBranch } from "../api/repositories";
+    import { githubOauth, logOut , getSession, fetchBranch,getSessionCodeUrl } from "../api/repositories";
     import Button from '../components/Button.vue';
     const clientId = import.meta.env.VITE_CLIENT_ID;
     const clientSecret = import.meta.env.VITE_CLIENT_SECRET;
-    const sessionToken = ref("")
-
-    //get session token from logged user and store in state
-
-    if (sessionToken.value === ""){
-    getSession(clientId,clientSecret).then((result)=>{
-            sessionToken.value = result;
-            fetchBranch(sessionToken.value);
-    })
+    const sessionUrl = getSessionCodeUrl(clientId,clientSecret);
+    if (sessionUrl){
+        getSession(sessionUrl).then((response)=>{
+            if (response){
+                console.log("Logged in!");
+            }else{
+                window.location.assign('/');
+            }
+            
+        })       
+        
+    }else{
+        console.log("Please login!");
     }
+    
+
     
     
     
@@ -29,7 +35,6 @@
 
        
         <div>
-        {{ sessionToken }}
 
         </div>
     </div>
