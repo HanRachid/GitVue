@@ -5,14 +5,12 @@ import { RouterLink } from "vue-router";
 
 
 <template>
-
     <header>
         <nav>
             <div>
-                <RouterLink to='/'>Vue is good</RouterLink>
+                <RouterLink to='/'></RouterLink>
             </div>
-            
+
         </nav>
     </header>
-    
 </template>
