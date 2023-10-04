@@ -4,19 +4,20 @@ export async function fetchBranch(token: string) {
   const octokit = new Octokit({
     auth: token,
   });
-  const res = await octokit.request('GET /repos/hanRachid/FootAll/issues', {
+  const res = await octokit.request('GET /user/repos', {
     headers: {
       'X-GitHub-Api-Version': '2022-11-28',
     },
   });
 
-  /* const repos: string[] = [];
+  const repos: string[] = [];
   res.data.forEach((repo) => {
     repos.push(repo.name);
-  }); */
-  console.log(res);
+  });
 
-  return res;
+  console.log(res.data);
+
+  return res.data as Object[];
 }
 /**
  * get the authenticated user's session code url to fetch. Used to check if user is authenticated.
@@ -62,7 +63,6 @@ export async function getSession(url: string) {
 export async function githubOauth(clientId: string) {
   window.location.assign(
     'https://github.com/login/oauth/authorize?client_id=' + clientId
-    //+ '&prompt=consent'
   );
 }
 /**

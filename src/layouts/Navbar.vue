@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
 </script>
-
-
 
 <template>
     <header>
         <nav>
-            <div>
-                <RouterLink to='/'></RouterLink>
+            <div class="bg-gradient-to-br from-blue-900 to-purple-600 py-16 md:bg-gradient-to-r">
+                <div class="container m-auto px-6 text-center md:px-12 lg:px-20">
+                    <slot />
+
+
+                </div>
             </div>
 
         </nav>
