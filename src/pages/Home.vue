@@ -1,35 +1,36 @@
 <script setup lang="ts">
     import {ref} from 'vue';
-    import Counter from "../components/Counter.vue";
-    import { githubOauth, logOut } from "../api/repositories";
-
-    const count = ref(0);
-    count.value = 10;
-    const user = ref("rachid");
+    import { githubOauth, logOut , getSession, fetchBranch } from "../api/repositories";
+    import Button from '../components/Button.vue';
     const clientId = import.meta.env.VITE_CLIENT_ID;
     const clientSecret = import.meta.env.VITE_CLIENT_SECRET;
-    const redirectUri = '/';
-    const token = import.meta.env.VITE_TOKEN;
-    console.log(clientId);
+    const sessionToken = ref("")
+
+    //get session token from logged user and store in state
+
+    if (sessionToken.value === ""){
+    getSession(clientId,clientSecret).then((result)=>{
+            sessionToken.value = result;
+            fetchBranch(sessionToken.value);
+    })
+    }
+    
+    
     
 </script>
 
 <template>
 
     <div>
-        <button @click="githubOauth(clientId)">Login</button>
+        <Button @click="githubOauth(clientId)">Login</Button>
 
-        <button @click="logOut()">Logout</button>
+        <Button @click="logOut()">Logout</Button>
 
 
+       
         <div>
-            <Counter v-model:count="count" 
-                @increment:count="count++" 
-                @decrement:count="count--"
-                v-model:user="user"
-            />
-        </div>
-        <div>
+        {{ sessionToken }}
+
         </div>
     </div>
 
