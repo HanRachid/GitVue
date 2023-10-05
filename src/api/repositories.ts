@@ -1,4 +1,10 @@
 import {Octokit} from 'octokit';
+import {reactive} from 'vue';
+
+//creating centralized store to share repos through the whole app
+export const store = reactive<any>({
+  repo: {},
+});
 
 /**
  * Fetch all repos from user
@@ -70,4 +76,10 @@ export async function logOut() {
   window.location.assign('/');
 }
 
-export async function fetchFromLink(link);
+export async function fetchFromLink(link: string) {
+  const request = await fetch(link);
+
+  const result = await request.json();
+
+  return result;
+}
