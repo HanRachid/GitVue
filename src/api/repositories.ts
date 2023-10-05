@@ -1,6 +1,11 @@
 import {Octokit} from 'octokit';
 
-export async function fetchBranch(token: string) {
+/**
+ * Fetch all repos from user
+ * @param token generated session token
+ * @returns all github repos data from user
+ */
+export async function fetchRepos(token: string) {
   const octokit = new Octokit({
     auth: token,
   });
@@ -10,14 +15,7 @@ export async function fetchBranch(token: string) {
     },
   });
 
-  const repos: string[] = [];
-  res.data.forEach((repo) => {
-    repos.push(repo.name);
-  });
-
-  console.log(res.data);
-
-  return res.data as Object[];
+  return res.data;
 }
 /**
  * get the authenticated user's session code url to fetch. Used to check if user is authenticated.
@@ -72,4 +70,4 @@ export async function logOut() {
   window.location.assign('/');
 }
 
-export var A = 132213;
+export async function fetchFromLink(link);
