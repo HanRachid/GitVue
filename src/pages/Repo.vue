@@ -2,8 +2,13 @@
 import { store, fetchBranch } from '../api/repositories';
 import Commits from "../components/Commits.vue";
 
+
+
+
+
 function onBranchChange(e: any) {
     const branchName = e.target.value
+
     fetchBranch(store.repo, branchName).then((result) => {
         store.selectedCommits = result;
 

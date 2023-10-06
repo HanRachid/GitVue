@@ -5,7 +5,6 @@ import { store, githubOauth, logOut, getSessionCodeUrl, getSession, fetchRepos }
 import Button from "../components/Button.vue";
 import Navbar from '../layouts/Navbar.vue';
 import Search from "../components/Search.vue";
-
 // const logged = ref(store.logged);
 
 const clientId = import.meta.env.VITE_CLIENT_ID;
@@ -19,10 +18,8 @@ const sessionUrl = getSessionCodeUrl(clientId, clientSecret);
 if (sessionUrl) {
    getSession(sessionUrl).then((response) => {
       if (response) {
-         console.log("Logged in!");
          fetchRepos(response).then((results) => {
             store.repos = results
-            console.log(results);
 
             toRaw(results).forEach((result: any) => {
                store.reponames = [...store.reponames, result.name]
@@ -30,7 +27,6 @@ if (sessionUrl) {
          })
 
          store.logged = true
-         console.log(store);
 
       } else if (!store.logged) {
          window.location.assign('/');
@@ -39,7 +35,6 @@ if (sessionUrl) {
    })
 
 } else {
-   console.log("Please login!");
 }
 
 </script>

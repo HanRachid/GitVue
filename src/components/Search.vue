@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import matchRepos from "../helpers/closestMatch";
-import { store } from '../api/repositories';
-
+import { getAccessCode, store } from '../api/repositories';
+import { router } from "../main";
 let id = 0;
 
 const search = ref("");
@@ -18,14 +18,16 @@ const computedResults = computed(() => {
 })
 
 function setRepo(name: string) {
+
     for (let i in store.repos) {
         if (store.repos[i].name === name) {
             store.repo = store.repos[i]
-
         }
-
     }
+    search.value = "";
+    router.push({ name: 'Repo', params: { repoId: store.repo.id, accessCode: getAccessCode() } })
 
+    // router.push('/repo/' + store.repo.name)
 }
 
 

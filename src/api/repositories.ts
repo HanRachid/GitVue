@@ -87,7 +87,6 @@ export async function githubOauth(clientId: string) {
  */
 export async function logOut() {
   store.logged = false;
-  console.log(store);
 
   window.location.assign('/');
 }
@@ -103,7 +102,18 @@ export async function fetchFromLink(link: string) {
 export const fetchBranch = async (repo: any, sha: any) => {
   const url =
     'https://api.github.com/repos/' + repo.full_name + '/commits?sha=' + sha;
-  console.log(url);
   const res = await fetchFromLink(url);
   return res;
+};
+
+export const fetchRepo = async (repo: any) => {
+  const url = 'https://api.github.com/repos/' + repo.full_name + '/branches';
+
+  const res = await fetchFromLink(url);
+  store.repo = repo;
+  store.selectedBranch = res[0];
+  fetchBranch(store.repo, store.selectedBranch.commit.sha).then((result) => {
+    store.selectedCommits = result;
+  });
+  store.branches = res;
 };

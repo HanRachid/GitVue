@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { store } from "../api/repositories";
 
-console.log(store);
 
 </script>
 
