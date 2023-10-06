@@ -1,24 +1,32 @@
 import {Octokit} from 'octokit';
 import {reactive} from 'vue';
+import {Branch, Repo} from '../types';
 
 //creating centralized store to share repos through the whole app
-export const store = reactive<any>({
+export const store = reactive<{
+  repos: Repo[];
+  branches: Branch[];
+  repo: Repo;
+  logged: boolean;
+  reponames: string[];
+  selectedBranch: Branch;
+  selectedCommits: Object[];
+  accessCode: string | null;
+}>({
   repos: [],
   branches: [],
-  repo: {},
+  repo: {} as Repo,
   logged: false,
   reponames: [],
-  selectedBranch: '',
+  selectedBranch: {} as Branch,
   selectedCommits: [],
   accessCode: getAccessCode(),
 });
 
 /**
  * Fetch all repos from user
- * @param token generated session token
- * @returns all github repos data from user
  */
-export async function fetchRepos(token: string) {
+export async function fetchRepos(token: string): Promise<any> {
   const octokit = new Octokit({
     auth: token,
   });
@@ -31,7 +39,13 @@ export async function fetchRepos(token: string) {
   return res.data;
 }
 
-export function getAccessCode() {
+/**
+ *
+ * Get access code
+ *
+ */
+
+export function getAccessCode(): string | null {
   const queryString = window.location.search;
 
   const urlParams = new URLSearchParams(queryString);
@@ -42,11 +56,11 @@ export function getAccessCode() {
 
 /**
  * get the authenticated user's session code url to fetch. Used to check if user is authenticated.
- * @param clientId Github Oauth app client ID
- * @param clientSecret Github Oauth app client secret
- * @returns url used to fetch access token
  */
-export function getSessionCodeUrl(clientId: string, clientSecret: string) {
+export function getSessionCodeUrl(
+  clientId: string,
+  clientSecret: string
+): string | null {
   const codeParam = getAccessCode();
   if (codeParam) {
     const params =
@@ -64,10 +78,10 @@ export function getSessionCodeUrl(clientId: string, clientSecret: string) {
 
 /**
  * Creates new access token for current session
- * @returns new access token for logged user
  */
-export async function getSession(url: string) {
+export async function getSession(url: string): Promise<string> {
   const getSession = await fetch(url);
+  console.log(getSession);
 
   const sessionResponse = await getSession.text();
   const sessionToken = sessionResponse.split('&')[0].split('access_token=')[1];
@@ -76,7 +90,6 @@ export async function getSession(url: string) {
 
 /**
  * Redirect user to Github OAuth, callback redirect is set in OAuth App settings
- * @param clientId Github OAuth app client ID
  */
 export async function githubOauth(clientId: string) {
   window.location.assign(
@@ -86,13 +99,16 @@ export async function githubOauth(clientId: string) {
 /**
  * Logs out user
  */
-export async function logOut() {
+export function logOut(): void {
   store.logged = false;
 
   window.location.assign('/');
 }
 
-export async function fetchFromLink(link: string) {
+/**
+ * Fetch using a crafted link
+ */
+export async function fetchFromLink(link: string): Promise<any> {
   const request = await fetch(link);
 
   const result = await request.json();
@@ -100,14 +116,25 @@ export async function fetchFromLink(link: string) {
   return result;
 }
 
-export const fetchBranch = async (repo: any, sha: any) => {
+/**
+ * Fetch a branch from a repo
+ */
+export const fetchBranch = async (repo: any, sha: any): Promise<any> => {
   const url =
     'https://api.github.com/repos/' + repo.full_name + '/commits?sha=' + sha;
   const res = await fetchFromLink(url);
   return res;
 };
 
-export const fetchRepo = async (repo: any, default_branch?: string) => {
+/**
+ * fetch repo and show default branch
+ * @param repo repo to fetch
+ * @param default_branch the repo's default branch, used to show the branch first
+ */
+export const fetchRepo = async (
+  repo: any,
+  default_branch?: string
+): Promise<void> => {
   const url = 'https://api.github.com/repos/' + repo.full_name + '/branches';
 
   const res = await fetchFromLink(url);
@@ -117,8 +144,11 @@ export const fetchRepo = async (repo: any, default_branch?: string) => {
       store.selectedBranch = result;
     }
   });
-  fetchBranch(store.repo, store.selectedBranch.commit.sha).then((result) => {
-    store.selectedCommits = result;
-  });
+  if (default_branch) {
+    fetchBranch(store.repo, store.selectedBranch.commit.sha).then((result) => {
+      store.selectedCommits = result;
+    });
+  }
+
   store.branches = res;
 };

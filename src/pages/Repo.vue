@@ -14,6 +14,7 @@ function onBranchChange(e: any) {
     store.selectedBranch = e.target.value;
 }
 
+console.log(store);
 
 </script>
 

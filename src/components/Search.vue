@@ -25,13 +25,16 @@ function setRepo(name: string) {
         }
     }
     search.value = "";
-    fetchRepo(store.repo)
-    router.push({ name: 'Repo', params: { repoId: store.repo.id, accessCode: store.accessCode } });
+    fetchRepo(store.repo, store.repo.default_branch).then(() => {
+        router.push({ name: 'Repo', params: { repoId: store.repo.id, accessCode: store.accessCode } });
+    })
+
 
 
 
 }
 
+console.log(store);
 
 
 </script>
