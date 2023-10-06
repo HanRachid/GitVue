@@ -1,28 +1,32 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import matchRepos from "../helpers/closestMatch";
-const props = defineProps<{
-    reponames?: Object[];
-    repos?: Object[]
-}>()
+import { store } from '../api/repositories';
 
 let id = 0;
 
 const search = ref("");
 const computedResults = computed(() => {
-
-
     id = 0;
     const result: { element: string, id: number, url: string }[] = []
-    matchRepos(search.value, props.reponames).forEach((element) => {
-        const resultrepo: any = props.repos?.find((repo: any) => repo.name === element);
+    matchRepos(search.value, store.reponames).forEach((element) => {
+        const resultrepo: any = store.repos?.find((repo: any) => repo.name === element);
         result.push({ element: element, id: id++, url: resultrepo.url })
     })
-    console.log(result);
 
     return result;
 })
 
+function setRepo(name: string) {
+    for (let i in store.repos) {
+        if (store.repos[i].name === name) {
+            store.repo = store.repos[i]
+
+        }
+
+    }
+
+}
 
 
 
@@ -54,13 +58,13 @@ const computedResults = computed(() => {
             </div>
             <div v-for="result in computedResults" id="suggestion">
                 <div v-if="search.length !== 0" class="cursor-pointer py-2 px-3 hover:bg-slate-100" :key="id">
-                    <p @click="console.log(result)" class="text-sm font-medium text-gray-600">{{ result.element }}</p>
+                    <p @click="setRepo(result.element)" class="text-sm font-medium text-gray-600">{{ result.element }}</p>
                 </div>
 
 
             </div>
 
-            <div v-if="search.length > 0 && computedResults" class="cursor-default   py-2 px-3 ">
+            <div v-if="search.length > 0 && computedResults.length == 0" class="cursor-default   py-2 px-3 ">
                 <p class="text-sm font-medium text-gray-600">No match</p>
             </div>
 

@@ -1,21 +1,22 @@
 <script setup lang="ts">
-import { store } from '../api/repositories';
-const fetchBranch = async (repo: any, branch: any) => {
-    const url = "https://api.github.com/repos/" + repo.full_name + "/commits?sha=" + branch;
-    console.log(url);
-    const res = await fetchFromLink(url);
-    console.log(res);
-    return res
+import { store, fetchBranch } from '../api/repositories';
+import Commits from "../components/Commits.vue";
+
+function onBranchChange(e: any) {
+    const branchName = e.target.value
+    fetchBranch(store.repo, branchName).then((result) => {
+        store.selectedCommits = result;
+
+    })
+
+    store.selectedBranch = e.target.value;
 }
-store.repo.forEach(element => {
-    console.log(element.name + " " + element.commit.sha);
-
-});
-
 </script>
 
 <template>
-    <div>
-
-    </div>
+    <div>{{ store.repo.name }}</div>
+    <select @change="(e) => onBranchChange(e)">
+        <option v-for="branch in store.branches">{{ branch.name }}</option>
+    </select>
+    <Commits />
 </template>

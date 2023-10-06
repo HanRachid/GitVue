@@ -8,10 +8,10 @@ import {createRouter, createWebHistory} from 'vue-router';
 const routes = [
   {path: '/', component: Home},
   {
-    path: '/repo/:repoId',
+    path: '/?code=:accessCode/repo/:repoId',
     name: 'Repo',
     component: Repo,
-    props: true, // Enable passing props through route
+    prop: true,
   },
 ];
 

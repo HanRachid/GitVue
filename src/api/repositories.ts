@@ -3,7 +3,13 @@ import {reactive} from 'vue';
 
 //creating centralized store to share repos through the whole app
 export const store = reactive<any>({
+  repos: [],
+  branches: [],
   repo: {},
+  logged: false,
+  reponames: [],
+  selectedBranch: '',
+  selectedCommits: [],
 });
 
 /**
@@ -23,6 +29,16 @@ export async function fetchRepos(token: string) {
 
   return res.data;
 }
+
+export function getAccessCode() {
+  const queryString = window.location.search;
+
+  const urlParams = new URLSearchParams(queryString);
+  const codeParam = urlParams.get('code');
+
+  return codeParam;
+}
+
 /**
  * get the authenticated user's session code url to fetch. Used to check if user is authenticated.
  * @param clientId Github Oauth app client ID
@@ -30,10 +46,7 @@ export async function fetchRepos(token: string) {
  * @returns url used to fetch access token
  */
 export function getSessionCodeUrl(clientId: string, clientSecret: string) {
-  const queryString = window.location.search;
-
-  const urlParams = new URLSearchParams(queryString);
-  const codeParam = urlParams.get('code');
+  const codeParam = getAccessCode();
   if (codeParam) {
     const params =
       '?client_id=' +
@@ -73,6 +86,9 @@ export async function githubOauth(clientId: string) {
  * Logs out user
  */
 export async function logOut() {
+  store.logged = false;
+  console.log(store);
+
   window.location.assign('/');
 }
 
@@ -83,3 +99,11 @@ export async function fetchFromLink(link: string) {
 
   return result;
 }
+
+export const fetchBranch = async (repo: any, sha: any) => {
+  const url =
+    'https://api.github.com/repos/' + repo.full_name + '/commits?sha=' + sha;
+  console.log(url);
+  const res = await fetchFromLink(url);
+  return res;
+};
