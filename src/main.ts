@@ -6,7 +6,7 @@ import './style.css';
 import {createRouter, createWebHistory} from 'vue-router';
 
 const routes = [
-  {path: '/', component: Home},
+  {path: '/?code=:accessCode', component: Home, name: 'Home', alias: '/'},
   {
     path: '/?code=:accessCode/repo/:repoId',
     name: 'Repo',

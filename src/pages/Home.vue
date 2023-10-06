@@ -2,6 +2,7 @@
 import { getAccessCode, fetchRepo } from "../api/repositories";
 //create store to share data through whole app
 import { store } from '../api/repositories';
+console.log(store);
 
 
 </script>

@@ -37,6 +37,8 @@ if (sessionUrl) {
 } else {
 }
 
+
+
 </script>
 
 
@@ -46,7 +48,9 @@ if (sessionUrl) {
       <Navbar>
          <Button v-if=!store.logged @click="githubOauth(clientId)">Authenticate with Github</Button>
          <Button v-if=store.logged @click="logOut()"> Logout </Button>
-
+         <router-link v-if=store.logged :to="{ name: 'Home', params: { accessCode: store.accessCode } }">
+            CLICK ME
+         </router-link>
       </Navbar>
    </nav>
    <main>

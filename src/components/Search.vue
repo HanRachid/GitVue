@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import matchRepos from "../helpers/closestMatch";
-import { getAccessCode, store } from '../api/repositories';
+import { fetchRepo, store } from '../api/repositories';
 import { router } from "../main";
 let id = 0;
 
@@ -25,9 +25,11 @@ function setRepo(name: string) {
         }
     }
     search.value = "";
-    router.push({ name: 'Repo', params: { repoId: store.repo.id, accessCode: getAccessCode() } })
+    fetchRepo(store.repo)
+    router.push({ name: 'Repo', params: { repoId: store.repo.id, accessCode: store.accessCode } });
 
-    // router.push('/repo/' + store.repo.name)
+
+
 }
 
 

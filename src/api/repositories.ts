@@ -10,6 +10,7 @@ export const store = reactive<any>({
   reponames: [],
   selectedBranch: '',
   selectedCommits: [],
+  accessCode: getAccessCode(),
 });
 
 /**
