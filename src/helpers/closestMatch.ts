@@ -30,7 +30,10 @@ export default function matchRepos(str: any, array: any) {
   const closeMatches: any = [];
 
   array.forEach((element: any) => {
-    if (element.toLowerCase().includes(str.toLowerCase())) {
+    if (
+      element.toLowerCase().includes(str.toLowerCase()) &&
+      closeMatches.length < 8
+    ) {
       closeMatches.push(element);
     }
   });

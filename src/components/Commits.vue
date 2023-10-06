@@ -21,8 +21,6 @@ function addCommitToDate() {
             }
 
         })
-    console.log(commitDates.value);
-    console.log(dates.value);
 
 
 }
@@ -33,11 +31,14 @@ watch(store, () =>
 </script>
 
 <template>
-    <div v-for="commitDate in   commitDates  ">
-        {{ commitDate.date }}
-        <div v-for="commit in commitDate.commits">
-            <img class="w-10" :src="commit.author.avatar_url" alt="" srcset="">
-            {{ commit.commit.message }}
+    <div class="container mt-4 mx-auto" v-for="commitDate in   commitDates  ">
+        <span class="text-xl text-teal-800 font-mono bg-teal-100 inline rounded-full px-2 align-top  animate-pulse">
+            {{ commitDate.date }}</span>
+        <div class="flex items-center justify-start gap-6 card m-2 cursor-default border border-gray-400 rounded-lg   transform p-3 "
+            v-for="commit in commitDate.commits">
+            <img class="text-lg mb-2 w-6" :src="commit.author.avatar_url" alt="" srcset="">
+            <p class="font-mono text-lg  font-medium text-slate-900 ">
+                {{ commit.commit.message }}</p>
         </div>
     </div>
 </template>

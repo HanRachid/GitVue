@@ -107,12 +107,16 @@ export const fetchBranch = async (repo: any, sha: any) => {
   return res;
 };
 
-export const fetchRepo = async (repo: any) => {
+export const fetchRepo = async (repo: any, default_branch?: string) => {
   const url = 'https://api.github.com/repos/' + repo.full_name + '/branches';
 
   const res = await fetchFromLink(url);
   store.repo = repo;
-  store.selectedBranch = res[0];
+  res.forEach((result: any) => {
+    if (result.name === default_branch) {
+      store.selectedBranch = result;
+    }
+  });
   fetchBranch(store.repo, store.selectedBranch.commit.sha).then((result) => {
     store.selectedCommits = result;
   });
