@@ -20,24 +20,6 @@ const distance = function (a: any, b: any) {
 };
 
 /**
- *
- */
-const closestMatch = function (target: any, array: any, showOccurrences: any) {
-  if (showOccurrences === void 0) {
-    showOccurrences = false;
-  }
-  if (array.length === 0) return null;
-  var vals = [];
-  var found = [];
-  for (var i = 0; i < array.length; i++) vals.push(distance(target, array[i]));
-  var min = Math.min.apply(Math, vals);
-  for (var i = 0; i < vals.length; i++) {
-    if (vals[i] === min) found.push(array[i]);
-  }
-  return showOccurrences ? found : found[0];
-};
-
-/**
  * Finds results from repos using levenchtein distance.
  * This function first tries to find results that include the str, then uses Levenchtein
  * @param str str to find in array
