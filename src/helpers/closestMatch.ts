@@ -1,4 +1,4 @@
-const distance = function (a, b) {
+const distance = function (a: any, b: any) {
   var _a;
   if (a.length === 0) return b.length;
   if (b.length === 0) return a.length;
@@ -8,7 +8,7 @@ const distance = function (a, b) {
   for (var i = 1; i <= b.length; i++) {
     var prev = i;
     for (var j = 1; j <= a.length; j++) {
-      var val = void 0;
+      var val: any = void 0;
       if (b.charAt(i - 1) === a.charAt(j - 1)) val = row[j - 1];
       else val = Math.min(row[j - 1] + 1, prev + 1, row[j] + 1);
       row[j - 1] = prev;
@@ -22,15 +22,14 @@ const distance = function (a, b) {
 /**
  *
  */
-const closestMatch = function (target, array, showOccurrences) {
+const closestMatch = function (target: any, array: any, showOccurrences: any) {
   if (showOccurrences === void 0) {
     showOccurrences = false;
   }
   if (array.length === 0) return null;
   var vals = [];
   var found = [];
-  for (var i = 0; i < array.length; i++)
-    vals.push((0, distance)(target, array[i]));
+  for (var i = 0; i < array.length; i++) vals.push(distance(target, array[i]));
   var min = Math.min.apply(Math, vals);
   for (var i = 0; i < vals.length; i++) {
     if (vals[i] === min) found.push(array[i]);
@@ -45,15 +44,15 @@ const closestMatch = function (target, array, showOccurrences) {
  * @param array array to find results from
  * @returns results of search
  */
-export default function matchRepos(str, array) {
-  const closeMatches = [];
+export default function matchRepos(str: any, array: any) {
+  const closeMatches: any = [];
 
-  array.forEach((element) => {
+  array.forEach((element: any) => {
     if (element.toLowerCase().includes(str.toLowerCase())) {
       closeMatches.push(element);
     }
   });
-  array.forEach((element) => {
+  array.forEach((element: any) => {
     const splitmatch = distance(str, element.substring(0, str.length));
 
     if (

@@ -9,7 +9,7 @@ const search = ref("");
 const computedResults = computed(() => {
     id = 0;
     const result: { element: string, id: number, url: string }[] = []
-    matchRepos(search.value, store.reponames).forEach((element) => {
+    matchRepos(search.value, store.reponames).forEach((element: any) => {
         const resultrepo: any = store.repos?.find((repo: any) => repo.name === element);
         result.push({ element: element, id: id++, url: resultrepo.url })
     })
