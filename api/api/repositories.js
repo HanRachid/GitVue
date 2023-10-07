@@ -1,23 +1,6 @@
-import {Octokit} from 'octokit';
-
 const clientId = process.env.VITE_CLIENT_ID;
 const clientSecret = process.env.VITE_CLIENT_SECRET;
 const env = require('dotenv').config();
-/**
- * Fetch all repos from user
- */
-export async function fetchRepos(token) {
-  const octokit = new Octokit({
-    auth: token,
-  });
-  const res = await octokit.request('GET /user/repos', {
-    headers: {
-      'X-GitHub-Api-Version': '2022-11-28',
-    },
-  });
-
-  return res.data;
-}
 
 /**
  *
@@ -70,48 +53,3 @@ export async function githubOauth(clientId) {
     'https://github.com/login/oauth/authorize?client_id=' + clientId
   );
 }
-
-/**
- * Fetch using a crafted link
- */
-export async function fetchFromLink(link) {
-  const request = await fetch(link);
-
-  const result = await request.json();
-
-  return result;
-}
-
-/**
- * Fetch a branch from a repo
- */
-export const fetchBranch = async (repo, sha) => {
-  const url =
-    'https://api.github.com/repos/' + repo.full_name + '/commits?sha=' + sha;
-  const res = await fetchFromLink(url);
-  return res;
-};
-
-/**
- * fetch repo and show default branch
- * @param repo repo to fetch
- * @param default_branch the repo's default branch, used to show the branch first
- */
-export const fetchRepo = async (repo, default_branch) => {
-  const url = 'https://api.github.com/repos/' + repo.full_name + '/branches';
-
-  const res = await fetchFromLink(url);
-  store.repo = repo;
-  res.forEach((result) => {
-    if (result.name === default_branch) {
-      store.selectedBranch = result;
-    }
-  });
-  if (default_branch) {
-    fetchBranch(store.repo, store.selectedBranch.commit.sha).then((result) => {
-      store.selectedCommits = result;
-    });
-  }
-
-  store.branches = res;
-};
