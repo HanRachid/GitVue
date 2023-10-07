@@ -28,6 +28,9 @@ app.get('/session/:sessionCode', (req, res) => {
   });
 });
 
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
 //starting the app
 app.listen(port, () => {
   console.log('listening on port ' + port);
