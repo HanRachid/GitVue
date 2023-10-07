@@ -1,19 +1,33 @@
 <script setup lang="ts">
 import { RouterView } from "vue-router";
 import { toRaw } from "vue";
-import { store, githubOauth, logOut, getSessionCodeUrl, getSession, fetchRepos } from "../api/repositories";
+import { store, githubOauth, logOut, getSessionCodeUrl, fetchRepos } from "../api/repositories";
 import Button from "../components/Button.vue";
 import Navbar from '../layouts/Navbar.vue';
 import Search from "../components/Search.vue";
 import gitLogo from "../assets/Git-Icon-Black.svg";
 import vueLogo from "../assets/vue.svg";
-import Welcome from "../components/Welcome.vue";
+import { router } from '../main';
 
 
 
 getSessionCodeUrl().then((session) => {
+
+
    if (session) {
-      console.log(session);
+      router.push({ name: "Home", params: { accessCode: store.accessCode } });
+
+      store.logged = true
+      fetchRepos(session).then((results) => {
+         store.repos = results
+
+         toRaw(results).forEach((result: any) => {
+            store.reponames = [...store.reponames, result.name]
+         })
+
+      })
+
+
    }
 });
 
@@ -43,7 +57,6 @@ getSessionCodeUrl().then((session) => {
       <RouterView>
 
       </RouterView>
-      <Welcome v-if="!store.logged" class="h-4/4" />
 
 
    </main>

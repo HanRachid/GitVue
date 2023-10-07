@@ -59,13 +59,14 @@ export function getAccessCode(): string | null {
  */
 export async function getSessionCodeUrl() {
   const codeParam = getAccessCode();
-  console.log(codeParam);
 
   if (codeParam) {
     const response = await fetch('http://localhost:3000/session/' + codeParam);
     const token = await response.json();
+
     return token.token;
   }
+
   return null;
 }
 
@@ -73,8 +74,6 @@ export async function getSessionCodeUrl() {
  * Creates new access token for current session
  */
 export async function getSession(url: string): Promise<string> {
-  console.log(url);
-
   const getSession = await fetch(url);
 
   const sessionResponse = await getSession.text();

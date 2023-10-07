@@ -3,12 +3,19 @@ import { getAccessCode, fetchRepo } from "../api/repositories";
 import Repos from "../components/Repos.vue";
 //create store to share data through whole app
 import { store } from '../api/repositories';
+import { ref, watch } from 'vue';
+
+const repos = ref(store.repos);
+
+watch(store, () => {
+    repos.value = store.repos
+})
 
 
 </script>
 
 <template>
-    <div class="" v-for="repo in store.repos">
+    <div class="" v-for="repo in repos">
 
         <router-link @click="fetchRepo(repo, repo.default_branch)"
             :to="{ name: 'Repo', params: { repoId: repo.id, accessCode: getAccessCode() } }">

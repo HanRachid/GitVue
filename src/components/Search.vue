@@ -34,7 +34,6 @@ function setRepo(name: string) {
 
 }
 
-console.log(store);
 
 
 </script>

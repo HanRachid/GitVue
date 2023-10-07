@@ -58,8 +58,6 @@ export async function getSession(url) {
   const getSession = await fetch(url);
 
   const sessionResponse = await getSession.text();
-  console.log('SESSION RESPONSE');
-  console.log(sessionResponse);
   const sessionToken = sessionResponse.split('&')[0].split('access_token=')[1];
   return sessionToken;
 }
@@ -72,9 +70,6 @@ export async function githubOauth(clientId) {
     'https://github.com/login/oauth/authorize?client_id=' + clientId
   );
 }
-/**
- * Logs out user
- */
 
 /**
  * Fetch using a crafted link

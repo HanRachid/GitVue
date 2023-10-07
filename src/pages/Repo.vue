@@ -13,8 +13,6 @@ function onBranchChange(e: Event) {
 
 }
 
-console.log(store);
-
 </script>
 
 <template >
