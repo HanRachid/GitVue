@@ -1,7 +1,8 @@
 import {Octokit} from 'octokit';
 import {reactive} from 'vue';
 import {Branch, Repo} from '../types';
-const url = import.meta.env.VITE_CLIENT_URL;
+
+const url = process.env.VITE_CLIENT_URL;
 //creating centralized store to share repos through the whole app
 export const store = reactive<{
   repos: Repo[];

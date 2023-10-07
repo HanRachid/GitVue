@@ -15,7 +15,6 @@ getSessionCodeUrl().then((session) => {
 
 
    if (session) {
-      router.push({ name: "Home", params: { accessCode: store.accessCode } });
 
       store.logged = true
       fetchRepos(session).then((results) => {
@@ -24,6 +23,7 @@ getSessionCodeUrl().then((session) => {
          toRaw(results).forEach((result: any) => {
             store.reponames = [...store.reponames, result.name]
          })
+         router.push({ name: "Home", params: { accessCode: store.accessCode } });
 
       })
 
