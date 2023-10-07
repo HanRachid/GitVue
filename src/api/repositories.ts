@@ -1,7 +1,7 @@
 import {Octokit} from 'octokit';
 import {reactive} from 'vue';
 import {Branch, Repo} from '../types';
-
+const url = import.meta.env.VITE_CLIENT_URL;
 //creating centralized store to share repos through the whole app
 export const store = reactive<{
   repos: Repo[];
@@ -61,7 +61,7 @@ export async function getSessionCodeUrl() {
   const codeParam = getAccessCode();
 
   if (codeParam) {
-    const response = await fetch('http://localhost:3000/session/' + codeParam);
+    const response = await fetch(url + '/session/' + codeParam);
     const token = await response.json();
 
     return token.token;
@@ -85,7 +85,7 @@ export async function getSession(url: string): Promise<string> {
  * Redirect user to Github OAuth, callback redirect is set in OAuth App settings
  */
 export async function githubOauth() {
-  window.location.assign('http://localhost:3000/Oauth');
+  window.location.assign(url + '/Oauth');
 }
 /**
  * Logs out user
