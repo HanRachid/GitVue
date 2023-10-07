@@ -1,5 +1,14 @@
 import express from 'express';
 import {getAccessCode, getSession, getSessionCodeUrl} from './api/repositories';
+import cors from 'cors';
+const options = [
+  cors({
+    origin: '*',
+    methods: '*',
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  }),
+];
 
 const app = express();
 const port = process.env.VITE_CLIENT_PORT | 3000;
@@ -37,7 +46,10 @@ app.get('/test', (req, res) => {
 app.get('best', (req, res) => {
   res.send('WHY ISNT THIS WORKING ');
 });
+
+app.use(options);
 //starting the app
+
 app.listen(port, () => {
   console.log('listening on port ' + port);
 });
