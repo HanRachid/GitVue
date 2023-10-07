@@ -33,7 +33,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/test', (req, res) => {
-  res.sent('WHY ISNT THIS WORKING ');
+  res.send('WHY ISNT THIS WORKING ');
+});
+
+app.get('best', (req, res) => {
+  res.send('WHY ISNT THIS WORKING ');
 });
 //starting the app
 app.listen(port, () => {
