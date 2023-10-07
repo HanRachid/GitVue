@@ -24,6 +24,8 @@ To run this application locally or deploy it to a server, you need to have the f
 
 - **environment variables**: environmen variables should be in both backend and frontend app. for the backend, the oauth app public and secret keys are necessary, port is optional. For frontend, the default url is my vercel app, please specify your own backend.
 
+- ** In the Oauth app, you can specify "/index" as the base url, and "/login" as callback url
+
 ## Used technologies 
 
 - **Html / Css**
