@@ -29,7 +29,11 @@ app.get('/session/:sessionCode', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.send('ezaeza World!');
+});
+
+app.get('/test', (req, res) => {
+  res.sent('WHY ISNT THIS WORKING ');
 });
 //starting the app
 app.listen(port, () => {
