@@ -40,7 +40,7 @@ console.log(store);
 </script>
 
 <template>
-    <div class="w-5/5 flex items-center content-center justify-start p-5 pl-48 ml-">
+    <div class="w-5/5 flex items-center content-center justify-start p-5 pl-42 ml-">
         <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only">Search</label>
         <div class="relative">
             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">

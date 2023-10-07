@@ -1,32 +1,12 @@
 import {Octokit} from 'octokit';
-import {reactive} from 'vue';
-import {Branch, Repo} from '../types';
 
-//creating centralized store to share repos through the whole app
-export const store = reactive<{
-  repos: Repo[];
-  branches: Branch[];
-  repo: Repo;
-  logged: boolean;
-  reponames: string[];
-  selectedBranch: Branch;
-  selectedCommits: Object[];
-  accessCode: string | null;
-}>({
-  repos: [],
-  branches: [],
-  repo: {} as Repo,
-  logged: false,
-  reponames: [],
-  selectedBranch: {} as Branch,
-  selectedCommits: [],
-  accessCode: getAccessCode(),
-});
-
+const clientId = process.env.VITE_CLIENT_ID;
+const clientSecret = process.env.VITE_CLIENT_SECRET;
+const env = require('dotenv').config();
 /**
  * Fetch all repos from user
  */
-export async function fetchRepos(token: string): Promise<any> {
+export async function fetchRepos(token) {
   const octokit = new Octokit({
     auth: token,
   });
@@ -44,8 +24,7 @@ export async function fetchRepos(token: string): Promise<any> {
  * Get access code
  *
  */
-
-export function getAccessCode(): string | null {
+export function getAccessCode() {
   const queryString = window.location.search;
 
   const urlParams = new URLSearchParams(queryString);
@@ -57,14 +36,17 @@ export function getAccessCode(): string | null {
 /**
  * get the authenticated user's session code url to fetch. Used to check if user is authenticated.
  */
-export async function getSessionCodeUrl() {
-  const codeParam = getAccessCode();
-  console.log(codeParam);
+export function getSessionCodeUrl(clientId, clientSecret, accessCode) {
+  if (accessCode) {
+    const params =
+      '?client_id=' +
+      clientId +
+      '&client_secret=' +
+      clientSecret +
+      '&code=' +
+      accessCode;
 
-  if (codeParam) {
-    const response = await fetch('http://localhost:3000/session/' + codeParam);
-    const token = await response.json();
-    return token.token;
+    return 'https://github.com/login/oauth/access_token' + params;
   }
   return null;
 }
@@ -72,12 +54,12 @@ export async function getSessionCodeUrl() {
 /**
  * Creates new access token for current session
  */
-export async function getSession(url: string): Promise<string> {
-  console.log(url);
-
+export async function getSession(url) {
   const getSession = await fetch(url);
 
   const sessionResponse = await getSession.text();
+  console.log('SESSION RESPONSE');
+  console.log(sessionResponse);
   const sessionToken = sessionResponse.split('&')[0].split('access_token=')[1];
   return sessionToken;
 }
@@ -85,22 +67,19 @@ export async function getSession(url: string): Promise<string> {
 /**
  * Redirect user to Github OAuth, callback redirect is set in OAuth App settings
  */
-export async function githubOauth() {
-  window.location.assign('http://localhost:3000/Oauth');
+export async function githubOauth(clientId) {
+  window.location.assign(
+    'https://github.com/login/oauth/authorize?client_id=' + clientId
+  );
 }
 /**
  * Logs out user
  */
-export function logOut(): void {
-  store.logged = false;
-
-  window.location.assign('/');
-}
 
 /**
  * Fetch using a crafted link
  */
-export async function fetchFromLink(link: string): Promise<any> {
+export async function fetchFromLink(link) {
   const request = await fetch(link);
 
   const result = await request.json();
@@ -111,7 +90,7 @@ export async function fetchFromLink(link: string): Promise<any> {
 /**
  * Fetch a branch from a repo
  */
-export const fetchBranch = async (repo: any, sha: any): Promise<any> => {
+export const fetchBranch = async (repo, sha) => {
   const url =
     'https://api.github.com/repos/' + repo.full_name + '/commits?sha=' + sha;
   const res = await fetchFromLink(url);
@@ -123,15 +102,12 @@ export const fetchBranch = async (repo: any, sha: any): Promise<any> => {
  * @param repo repo to fetch
  * @param default_branch the repo's default branch, used to show the branch first
  */
-export const fetchRepo = async (
-  repo: any,
-  default_branch?: string
-): Promise<void> => {
+export const fetchRepo = async (repo, default_branch) => {
   const url = 'https://api.github.com/repos/' + repo.full_name + '/branches';
 
   const res = await fetchFromLink(url);
   store.repo = repo;
-  res.forEach((result: any) => {
+  res.forEach((result) => {
     if (result.name === default_branch) {
       store.selectedBranch = result;
     }

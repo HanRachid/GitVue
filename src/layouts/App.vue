@@ -9,35 +9,15 @@ import gitLogo from "../assets/Git-Icon-Black.svg";
 import vueLogo from "../assets/vue.svg";
 import Welcome from "../components/Welcome.vue";
 
-const clientId = import.meta.env.VITE_CLIENT_ID;
-const clientSecret = import.meta.env.VITE_CLIENT_SECRET;
-const sessionUrl = getSessionCodeUrl(clientId, clientSecret);
 
 
+getSessionCodeUrl().then((session) => {
+   if (session) {
+      console.log(session);
+   }
+});
 
 
-//checks if session is valid
-if (sessionUrl) {
-   getSession(sessionUrl).then((response) => {
-      if (response) {
-         fetchRepos(response).then((results) => {
-            store.repos = results
-
-            toRaw(results).forEach((result: any) => {
-               store.reponames = [...store.reponames, result.name]
-            })
-         })
-
-         store.logged = true
-
-      } else if (!store.logged) {
-         window.location.assign('/');
-      }
-
-   })
-
-} else {
-}
 
 
 
@@ -52,7 +32,7 @@ if (sessionUrl) {
             <img :src="gitLogo" class="w-12">
             <img :src="vueLogo" class="w-12">
          </router-link>
-         <Button v-if=!store.logged @click="githubOauth(clientId)">Authenticate with Github</Button>
+         <Button v-if=!store.logged @click="githubOauth()">Authenticate with Github</Button>
          <Button v-if=store.logged @click="logOut()"> Logout </Button>
 
       </Navbar>
