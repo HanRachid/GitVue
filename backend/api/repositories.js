@@ -1,76 +1,54 @@
-import express from 'express';
-import {getAccessCode, getSession, getSessionCodeUrl} from './api/repositories';
-import cors from 'cors';
-const options = [
-  cors({
-    origin: '*',
-    methods: '*',
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-  }),
-];
-
-const app = express();
-const port = process.env.VITE_CLIENT_PORT | 3000;
 const clientId = process.env.VITE_CLIENT_ID;
 const clientSecret = process.env.VITE_CLIENT_SECRET;
 
-//redirect user to OAuth window
-app.get('/Oauth', (req, res) => {
-  res.redirect(
+/**
+ *
+ * Get access code
+ *
+ */
+export function getAccessCode() {
+  const queryString = window.location.search;
+
+  const urlParams = new URLSearchParams(queryString);
+  const codeParam = urlParams.get('code');
+
+  return codeParam;
+}
+
+/**
+ * get the authenticated user's session code url to fetch. Used to check if user is authenticated.
+ */
+export function getSessionCodeUrl(clientId, clientSecret, accessCode) {
+  if (accessCode) {
+    const params =
+      '?client_id=' +
+      clientId +
+      '&client_secret=' +
+      clientSecret +
+      '&code=' +
+      accessCode;
+
+    return 'https://github.com/login/oauth/access_token' + params;
+  }
+  return null;
+}
+
+/**
+ * Creates new access token for current session
+ */
+export async function getSession(url) {
+  const getSession = await fetch(url);
+
+  const sessionResponse = await getSession.text();
+  const sessionToken = sessionResponse.split('&')[0].split('access_token=')[1];
+  return sessionToken;
+}
+
+/**
+ * Redirect user to Github OAuth, callback redirect is set in OAuth App settings
+ */
+export async function githubOauth(clientId) {
+  window.location.assign(
     'https://github.com/login/oauth/authorize?client_id=' + clientId
   );
-});
-
-// generates session token using clientId, secretId and session code
-app.get('/session/:sessionCode', (req, res) => {
-  const codeUrl = getSessionCodeUrl(
-    clientId,
-    clientSecret,
-    req.params.sessionCode
-  );
-
-  getSession(codeUrl).then((result) => {
-    res.send({token: result});
-  });
-});
-
-app.get('/', (req, res) => {
-  res.send('ezaeza World!');
-});
-
-app.get('/test', (req, res) => {
-  res.send('WHY ISNT THIS WORKING ');
-});
-
-app.get('best', (req, res) => {
-  res.send('WHY ISNT THIS WORKING ');
-});
-
-app.use(options);
-//starting the app
-
-app.listen(port, () => {
-  console.log('listening on port ' + port);
-});
-
-const allowCors = (fn) => async (req, res) => {
-  res.setHeader('Access-Control-Allow-Credentials', true);
-
-  res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
-  res.setHeader(
-    'Access-Control-Allow-Methods',
-    'GET,OPTIONS,PATCH,DELETE,POST,PUT'
-  );
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  );
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
-  }
-  return await fn(req, res);
-};
-
-app.use(allowCors);
+}
