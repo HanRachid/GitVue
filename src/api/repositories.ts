@@ -2,13 +2,7 @@ import {Octokit} from 'octokit';
 import {reactive} from 'vue';
 import {Branch, Repo} from '../types';
 
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-const url: string = process.env.VITE_CLIENT_URL
-  ? process.env.VITE_CLIENT_URL
-  : 'https://rachid-handaoui-taas-backend-challenge-2c61.vercel.app/';
+const url = 'https://rachid-handaoui-taas-frontend-challenge-2q61.vercel.app';
 
 //creating centralized store to share repos through the whole app
 export const store = reactive<{

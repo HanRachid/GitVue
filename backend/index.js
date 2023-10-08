@@ -54,10 +54,13 @@ app.listen(port, () => {
   console.log('listening on port ' + port);
 });
 
+// allow cors
+
 const allowCors = (fn) => async (req, res) => {
   res.setHeader('Access-Control-Allow-Credentials', true);
-
-  res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  // another common pattern
+  // res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
   res.setHeader(
     'Access-Control-Allow-Methods',
     'GET,OPTIONS,PATCH,DELETE,POST,PUT'
@@ -73,4 +76,9 @@ const allowCors = (fn) => async (req, res) => {
   return await fn(req, res);
 };
 
-app.use(allowCors);
+const handler = (req, res) => {
+  const d = new Date();
+  res.end(d.toString());
+};
+
+module.exports = allowCors(handler);
