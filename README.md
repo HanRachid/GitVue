@@ -1,6 +1,6 @@
-# GitHub Commit and Branch Viewer
+# GitVue
 
-The GitHub Commit and Branch Viewer is a web application that utilizes the GitHub API to allow users to check their commits and branches for any of their repositories. This app provides a convenient way for users to keep track of their code changes and repository branches directly from their GitHub account.
+GitVue is a web application that utilizes the GitHub API to allow users to check their commits and branches for any of their repositories. This app provides a convenient way for users to keep track of their code changes and repository branches directly from their GitHub account.
 
 ## Features
 
@@ -24,7 +24,7 @@ To run this application locally or deploy it to a server, you need to have the f
 
 - **environment variables**: environmen variables should be in both backend and frontend app. for the backend, the oauth app public and secret keys are necessary, port is optional. For frontend, the default url is my vercel app, please specify your own backend.
 
-- ** In the Oauth app, you can specify "/index" as the base url, and "/login" as callback url
+- *Github OAuth settings* In the OAuth app, you can specify "{yoururl}/index" as the base url, and "{yoururl}/login" as callback url
 
 ## Used technologies 
 
