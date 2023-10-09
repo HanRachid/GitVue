@@ -95,9 +95,7 @@ export async function githubOauth() {
 export function logOut(): void {
   store.logged = false;
 
-  window.location.assign(
-    import.meta.env.BASE_URL ? import.meta.env.BASE_URL + '/index' : '/index'
-  );
+  window.location.assign('/');
 }
 
 /**

@@ -1,5 +1,5 @@
 export interface Branch {
-  commit: { sha: string; url: string };
+  commit: {sha: string; url: string};
   name: string;
 }
 

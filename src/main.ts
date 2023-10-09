@@ -1,33 +1,32 @@
-import { createApp } from "vue";
-import Home from "./pages/Home.vue";
-import Repo from "./pages/Repo.vue";
-import App from "./layouts/App.vue";
-import "./style.css";
-import { createRouter, createWebHistory } from "vue-router";
-import Welcome from "./pages/Welcome.vue";
-import Login from "./pages/Login.vue";
-const url = import.meta.env.BASE_URL ? import.meta.env.BASE_URL : "/";
+import {createApp} from 'vue';
+import Home from './pages/Home.vue';
+import Repo from './pages/Repo.vue';
+import App from './layouts/App.vue';
+import './style.css';
+import {createRouter, createWebHistory} from 'vue-router';
+import Welcome from './pages/Welcome.vue';
+import Login from './pages/Login.vue';
 
 const routes = [
   {
-    path: url + "/:accessCode",
+    path: '/:accessCode',
     component: Home,
-    name: "Home",
+    name: 'Home',
   },
   {
-    path: url + "/index",
+    path: '/index',
     component: Welcome,
-    name: "Welcome",
-    alias: url + "/",
+    name: 'Welcome',
+    alias: '/',
   },
   {
-    path: url + "/login",
+    path: '/login',
     component: Login,
-    name: "Login",
+    name: 'Login',
   },
   {
-    path: url + "/repo/:accessCode/repo/:repoId",
-    name: "Repo",
+    path: '/repo/:accessCode/repo/:repoId',
+    name: 'Repo',
     component: Repo,
     prop: true,
   },
@@ -40,4 +39,4 @@ export const router = createRouter({
 
 const app = createApp(App);
 app.use(router);
-app.mount("#app");
+app.mount('#app');
