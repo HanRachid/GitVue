@@ -65,8 +65,8 @@ watch(store, () =>
             {{ commitDate.date }}</span>
         <div class="flex items-center justify-between gap-6 card m-2 cursor-default border border-gray-400 rounded-lg   transform p-3 "
             v-for="commit in commitDate.commits">
-            <div class="flex gap-3 justify-center items-center"> <img class="text-lg mb-2 w-6"
-                    :src="commit.author.avatar_url" alt="" srcset="">
+            <div class="flex gap-3 justify-center items-center"> <img class="text-lg w-6" :src="commit.author.avatar_url"
+                    alt="" srcset="">
                 <p class="font-mono text-lg  font-medium text-slate-900 ">
                     {{ commit.commit.message }} </p>
             </div>

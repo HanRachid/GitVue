@@ -16,7 +16,6 @@ watch(store, () => {
 
 <template>
     <div class="" v-for="repo in repos">
-
         <router-link @click="fetchRepo(repo, repo.default_branch)"
             :to="{ name: 'Repo', params: { repoId: repo.id, accessCode: getAccessCode() } }">
 

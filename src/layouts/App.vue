@@ -58,6 +58,5 @@ getSessionCodeUrl().then((session) => {
 
       </RouterView>
 
-
    </main>
 </template>
