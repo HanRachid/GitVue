@@ -67,7 +67,7 @@ watch(store, () =>
     >
       <div class="flex gap-3 justify-center items-center">
         <img
-          class="text-lg mb-2 w-6"
+          class="text-lg  w-10"
           :src="commit.author.avatar_url"
           alt=""
           srcset=""

@@ -1,6 +1,3 @@
-const clientId = process.env.VITE_CLIENT_ID;
-const clientSecret = process.env.VITE_CLIENT_SECRET;
-
 /**
  *
  * Get access code
