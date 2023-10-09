@@ -8,4 +8,16 @@ export interface Repo {
   id: number;
   name: string;
   full_name: string;
+  commit:{
+    message:string;
+    author:{
+      date:string
+    }
+  };
+  url:string;
+  author:{
+    avatar_url:string
+    date:string
+  };
+  message:string
 }

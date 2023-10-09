@@ -2,62 +2,65 @@
 import { RouterView } from "vue-router";
 import { toRaw } from "vue";
 import { store, githubOauth, logOut, getSessionCodeUrl, fetchRepos } from "../api/repositories";
-import Button from "../components/Button.vue";
-import Navbar from '../layouts/Navbar.vue';
-import Search from "../components/Search.vue";
+import ButtonComponent from "../components/ButtonComponent.vue";
+import NavbarLayout from './NavbarLayout.vue';
+import SearchComponent from "../components/SearchComponent.vue";
 import gitLogo from "../assets/Git-Icon-Black.svg";
 import vueLogo from "../assets/vue.svg";
 import { router } from '../main';
-
-
+import { Repo } from '../types';
 
 getSessionCodeUrl().then((session) => {
-
-
    if (session) {
-
       store.logged = true
       fetchRepos(session).then((results) => {
-         store.repos = results
-
-         toRaw(results).forEach((result: any) => {
-            store.reponames = [...store.reponames, result.name]
+         store.repos = results as Repo[]
+         toRaw(results).forEach((result: object) => {
+            store.reponames.push((result as Repo).name)
          })
          router.push({ name: "Home", params: { accessCode: store.accessCode } });
-
       })
-
-
    }
 });
-
-
-
-
-
 </script>
-
-
-
 <template>
-   <nav class="px-32 flex-col">
-      <Navbar>
-         <router-link class="flex" v-if=store.logged :to="{ name: 'Home', params: { accessCode: store.accessCode } }">
-            <img :src="gitLogo" class="w-12">
-            <img :src="vueLogo" class="w-12">
-         </router-link>
-         <Button v-if=!store.logged @click="githubOauth()">Authenticate with Github</Button>
-         <Button v-if=store.logged @click="logOut()"> Logout </Button>
+  <nav class="px-32 flex-col">
+    <NavbarLayout>
+      <router-link
+        v-if="store.logged"
+        class="flex"
+        :to="{ name: 'Home', params: { accessCode: store.accessCode } }"
+      >
+        <img
+          :src="gitLogo"
+          class="w-12"
+        >
+        <img
+          :src="vueLogo"
+          class="w-12"
+        >
+      </router-link>
+      <ButtonComponent
+        v-if="!store.logged"
+        @click="githubOauth()"
+      >
+        Authenticate with Github
+      </ButtonComponent>
+      <ButtonComponent
+        v-if="store.logged"
+        @click="logOut()"
+      >
+        Logout
+      </ButtonComponent>
+    </NavbarLayout>
+  </nav>
+  <main class="px-32 flex-col">
+    <SearchComponent
+      v-if="store.logged"
+      :reponames="store.reponames"
+      :repos="store.repos"
+    />
 
-      </Navbar>
-   </nav>
-   <main class="px-32 flex-col">
-      <Search :reponames="store.reponames" :repos="store.repos" v-if=store.logged></Search>
-
-      <RouterView>
-
-      </RouterView>
-
-
-   </main>
+    <RouterView />
+  </main>
 </template>

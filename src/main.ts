@@ -1,33 +1,34 @@
 import {createApp} from 'vue';
-import Home from './pages/Home.vue';
-import Repo from './pages/Repo.vue';
+import HomePage from './pages/HomePage.vue';
+import RepoPage from './pages/RepoPage.vue';
 import App from './layouts/App.vue';
+import WelcomePage from './pages/WelcomePage.vue';
+import LoginPage from './pages/LoginPage.vue';
 import './style.css';
 import {createRouter, createWebHistory} from 'vue-router';
-import Welcome from './pages/Welcome.vue';
-import Login from './pages/Login.vue';
+
 
 const routes = [
   {
     path: '/:accessCode',
-    component: Home,
+    component: HomePage,
     name: 'Home',
   },
   {
     path: '/index',
-    component: Welcome,
+    component: WelcomePage,
     name: 'Welcome',
     alias: '/',
   },
   {
     path: '/login',
-    component: Login,
+    component: LoginPage,
     name: 'Login',
   },
   {
     path: '/repo/:accessCode/repo/:repoId',
     name: 'Repo',
-    component: Repo,
+    component: RepoPage,
     prop: true,
   },
 ];

@@ -12,7 +12,7 @@ export const store = reactive<{
   logged: boolean;
   reponames: string[];
   selectedBranch: Branch;
-  selectedCommits: Object[];
+  selectedCommits: Repo[];
   accessCode: string | null;
 }>({
   repos: [],
@@ -28,7 +28,7 @@ export const store = reactive<{
 /**
  * Fetch all repos from user
  */
-export async function fetchRepos(token: string): Promise<any> {
+export async function fetchRepos(token: string): Promise<object[]> {
   const octokit = new Octokit({
     auth: token,
   });
@@ -37,7 +37,7 @@ export async function fetchRepos(token: string): Promise<any> {
       'X-GitHub-Api-Version': '2022-11-28',
     },
   });
-
+  
   return res.data;
 }
 
@@ -101,7 +101,7 @@ export function logOut(): void {
 /**
  * Fetch using a crafted link
  */
-export async function fetchFromLink(link: string): Promise<any> {
+export async function fetchFromLink(link: string): Promise<object[]> {
   const request = await fetch(link);
 
   const result = await request.json();
@@ -112,7 +112,7 @@ export async function fetchFromLink(link: string): Promise<any> {
 /**
  * Fetch a branch from a repo
  */
-export const fetchBranch = async (repo: any, sha: any): Promise<any> => {
+export const fetchBranch = async (repo: Repo, sha: string): Promise<object> => {
   const url =
     'https://api.github.com/repos/' + repo.full_name + '/commits?sha=' + sha;
   const res = await fetchFromLink(url);
@@ -125,23 +125,23 @@ export const fetchBranch = async (repo: any, sha: any): Promise<any> => {
  * @param default_branch the repo's default branch, used to show the branch first
  */
 export const fetchRepo = async (
-  repo: any,
+  repo: Repo,
   default_branch?: string
 ): Promise<void> => {
   const url = 'https://api.github.com/repos/' + repo.full_name + '/branches';
 
   const res = await fetchFromLink(url);
   store.repo = repo;
-  res.forEach((result: any) => {
-    if (result.name === default_branch) {
-      store.selectedBranch = result;
+  res.forEach((result:object) => {
+    const res = result as Branch
+    if (res.name === default_branch) {
+      store.selectedBranch = res;
     }
   });
   if (default_branch) {
-    fetchBranch(store.repo, store.selectedBranch.commit.sha).then((result) => {
-      store.selectedCommits = result;
+    fetchBranch(store.repo, store.selectedBranch.commit.sha).then((result: object) => {
+      store.selectedCommits = result as Repo[];
     });
   }
-
-  store.branches = res;
+  store.branches = res as Branch[];
 };
