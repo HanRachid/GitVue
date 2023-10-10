@@ -9,25 +9,26 @@ import WelcomePage from './pages/WelcomePage.vue';
 import LoginPage from './pages/LoginPage.vue';
 import './style.css';
 
+const baseUrl = '/rachid_handaoui-taas-frontend-challenge';
 const routes = [
 	{
-		path: '/:user',
+		path: baseUrl + '/:user',
 		component: HomePage,
 		name: 'Home',
 	},
 	{
-		path: '/index',
+		path: baseUrl + '/index',
 		component: WelcomePage,
 		name: 'Welcome',
-		alias: '/',
+		alias: baseUrl,
 	},
 	{
-		path: '/login',
+		path: baseUrl + '/login',
 		component: LoginPage,
 		name: 'Login',
 	},
 	{
-		path: '/:user/repo/:repoId',
+		path: baseUrl + '/:user/repo/:repoId',
 		name: 'Repo',
 		component: RepoPage,
 		prop: true,

@@ -9,6 +9,7 @@ import gitLogo from '../assets/Git-Icon-Black.svg';
 import vueLogo from '../assets/vue.svg';
 import {router} from '../main';
 import {Repo, User} from '../types';
+const baseUrl = '/rachid_handaoui-taas-frontend-challenge/';
 
 getSessionCodeUrl().then(session => {
 	if (session) {
@@ -21,13 +22,12 @@ getSessionCodeUrl().then(session => {
 			});
 			fetchRepos(session, '').then((userResult: object) => {
 				store.user = userResult as User;
-				console.log(userResult);
 
 				router.push({name: 'Home', params: {user: store.user?.login}});
 			});
 		});
-	} else if (window.location.pathname !== '/') {
-		window.location.assign('/');
+	} else if (window.location.pathname !== baseUrl) {
+		window.location.assign(baseUrl);
 	}
 });
 </script>
