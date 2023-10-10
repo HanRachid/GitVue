@@ -6,9 +6,6 @@ import {store} from '../api/repositories';
 import {ref, watch} from 'vue';
 
 const repos = ref(store.repos);
-console.log('HOME STORE');
-
-console.log(store);
 
 watch(store, () => {
 	repos.value = store.repos;

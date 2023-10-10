@@ -1,6 +1,7 @@
 <script setup lang="ts">
 // eslint-disable-next-line vue/require-default-prop
 const props = defineProps({name: String, fullName: String, defaultBranch: String});
+
 </script>
 
 <template>
@@ -13,11 +14,15 @@ const props = defineProps({name: String, fullName: String, defaultBranch: String
           <h2 class="text-lg mb-2">
             {{ props.name }}
             <span
-              class="text-sm text-teal-800 font-mono bg-teal-100 inline rounded-full px-2 align-top float-right animate-pulse"
+              class="text-sm text-teal-800 font-mono bg-teal-100 inline rounded-full px-2
+              align-top float-right"
             >{{
               defaultBranch }}</span>
           </h2>
-          <p class="font-light font-mono text-sm text-gray-700 hover:text-gray-900 transition-all duration-200">
+          <p
+            class="font-light font-mono text-sm text-gray-700 hover:text-gray-900
+          transition-all duration-200"
+          >
             {{ props.fullName }}
           </p>
         </div>
