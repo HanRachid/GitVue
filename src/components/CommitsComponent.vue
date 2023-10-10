@@ -1,55 +1,61 @@
 <script setup lang="ts">
-import { store } from "../api/repositories";
-import { ref, watch } from "vue";
-import { Repo } from '../types';
+import {store} from '../api/repositories';
+import {ref, watch} from 'vue';
+import {Repo} from '../types';
 
 const commitDates = ref<{ date: string, commits: Repo[]; }[]>([]);
 const dates = ref<string[]>([]);
 
 function timeSince(date: string) {
-  const seconds = Math.floor((new Date().getTime() / 1000 - new Date(date).getTime() / 1000));
-  let interval = seconds / 31536000;
-  if (interval > 1) {
-    return Math.floor(interval) + " year" + (Math.floor(interval) === 1 ? "" : "s");
-  }
-  interval = seconds / 2592000;
-  if (interval > 1) {
-    return Math.floor(interval) + " month" + (Math.floor(interval) === 1 ? "" : "s");
-  }
-  interval = seconds / 86400;
-  if (interval > 1) {
-    return Math.floor(interval) + " day" + (Math.floor(interval) === 1 ? "" : "s");
-  }
-  interval = seconds / 3600;
-  if (interval > 1) {
-    return Math.floor(interval) + " hour" + (Math.floor(interval) === 1 ? "" : "s");
-  }
-  interval = seconds / 60;
-  if (interval > 1) {
-    return Math.floor(interval) + " minute" + (Math.floor(interval) === 1 ? "" : "s");
-  }
-  return Math.floor(seconds) + " second" + (Math.floor(interval) === 1 ? "" : "s");
+	const seconds = Math.floor(((new Date().getTime() / 1000) - (new Date(date).getTime() / 1000)));
+	let interval = seconds / 31536000;
+	if (interval > 1) {
+		return Math.floor(interval) + ' year' + (Math.floor(interval) === 1 ? '' : 's');
+	}
+
+	interval = seconds / 2592000;
+	if (interval > 1) {
+		return Math.floor(interval) + ' month' + (Math.floor(interval) === 1 ? '' : 's');
+	}
+
+	interval = seconds / 86400;
+	if (interval > 1) {
+		return Math.floor(interval) + ' day' + (Math.floor(interval) === 1 ? '' : 's');
+	}
+
+	interval = seconds / 3600;
+	if (interval > 1) {
+		return Math.floor(interval) + ' hour' + (Math.floor(interval) === 1 ? '' : 's');
+	}
+
+	interval = seconds / 60;
+	if (interval > 1) {
+		return Math.floor(interval) + ' minute' + (Math.floor(interval) === 1 ? '' : 's');
+	}
+
+	return Math.floor(seconds) + ' second' + (Math.floor(interval) === 1 ? '' : 's');
 }
 
-function addCommitToDate() {
-  dates.value = [],
-    commitDates.value = [],
-    store.selectedCommits.forEach((commit: Repo) => {
-      const commitDate = commit.commit.author.date.split('T')[0];
-      if (dates.value.includes(commitDate)) {
-        commitDates.value.forEach((commitData) => {
-          if (commitData.date === commitDate) {
-            commitData.commits.push(commit);
-          }
-        });
-      } else {
-        dates.value.push(commitDate);
-        commitDates.value.push({ date: commitDate, commits: [commit] });
-      }
-    });
-}
+const addCommitToDate = () => {
+	dates.value = [];
+	commitDates.value = [];
+	store.selectedCommits.forEach((commit: Repo) => {
+		const commitDate = commit.commit.author.date.split('T')[0];
+		if (dates.value.includes(commitDate)) {
+			commitDates.value.forEach(commitData => {
+				if (commitData.date === commitDate) {
+					commitData.commits.push(commit);
+				}
+			});
+		} else {
+			dates.value.push(commitDate);
+			commitDates.value.push({date: commitDate, commits: [commit]});
+		}
+	});
+};
+
 watch(store, () =>
-  addCommitToDate());
+	addCommitToDate());
 </script>
 
 <template>

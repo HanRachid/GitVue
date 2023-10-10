@@ -1,35 +1,43 @@
 <script setup lang="ts">
-import { RouterView } from "vue-router";
-import { toRaw } from "vue";
-import { store, githubOauth, logOut, getSessionCodeUrl, fetchRepos } from "../api/repositories";
-import ButtonComponent from "../components/ButtonComponent.vue";
+import {RouterView} from 'vue-router';
+import {toRaw} from 'vue';
+import {store, githubOauth, logOut, getSessionCodeUrl, fetchRepos} from '../api/repositories';
+import ButtonComponent from '../components/ButtonComponent.vue';
 import NavbarLayout from './NavbarLayout.vue';
-import SearchComponent from "../components/SearchComponent.vue";
-import gitLogo from "../assets/Git-Icon-Black.svg";
-import vueLogo from "../assets/vue.svg";
-import { router } from '../main';
-import { Repo } from '../types';
+import SearchComponent from '../components/SearchComponent.vue';
+import gitLogo from '../assets/Git-Icon-Black.svg';
+import vueLogo from '../assets/vue.svg';
+import {router} from '../main';
+import {Repo, User} from '../types';
 
-getSessionCodeUrl().then((session) => {
-   if (session) {
-      store.logged = true
-      fetchRepos(session).then((results) => {
-         store.repos = results as Repo[]
-         toRaw(results).forEach((result: object) => {
-            store.reponames.push((result as Repo).name)
-         })
-         router.push({ name: "Home", params: { accessCode: store.accessCode } });
-      })
-   }
+getSessionCodeUrl().then(session => {
+	if (session) {
+		store.logged = true;
+		fetchRepos(session, '/repos').then(results => {
+			store.repos = results as Repo[];
+
+			toRaw(results).forEach((result: object) => {
+				store.reponames.push((result as Repo).name);
+			});
+			fetchRepos(session, '').then((userResult: object) => {
+				store.user = userResult as User;
+				console.log(userResult);
+
+				router.push({name: 'Home', params: {user: store.user?.login}});
+			});
+		});
+	} else if (window.location.pathname !== '/') {
+		window.location.assign('/');
+	}
 });
 </script>
 <template>
   <nav class="px-32 flex-col">
     <NavbarLayout>
       <router-link
-        v-if="store.logged"
+        v-if="store.user"
         class="flex"
-        :to="{ name: 'Home', params: { accessCode: store.accessCode } }"
+        :to="{ name: 'Home', params:{user: store.user.login}} "
       >
         <img
           :src="gitLogo"
@@ -46,6 +54,18 @@ getSessionCodeUrl().then((session) => {
       >
         Authenticate with Github
       </ButtonComponent>
+      <div
+        class="flex gap-5 justify-center items-center"
+        v-if="store.user"
+      >
+        <img
+          :src="store.user.avatar_url"
+          class="w-8"
+        >
+        <p class="text-stone-900 text-2xl font-bold ">
+          {{ store.user.login }}
+        </p>
+      </div>
       <ButtonComponent
         v-if="store.logged"
         @click="logOut()"

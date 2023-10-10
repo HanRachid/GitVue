@@ -1,34 +1,34 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import matchRepos from "../helpers/closestMatch";
-import { fetchRepo, store } from '../api/repositories';
-import { router } from "../main";
-import { Repo } from '../types';
+import {ref, computed} from 'vue';
+import matchRepos from '../helpers/closest-match';
+import {fetchRepo, store} from '../api/repositories';
+import {router} from '../main';
+import {Repo} from '../types';
 
 let id = 0;
-const search = ref("");
+const search = ref('');
 const computedResults = computed(() => {
-  id = 0;
-  const result: { element: string, id: number, url: string; }[] = [];
-  matchRepos(search.value, store.reponames).forEach((element: string) => {
-    const resultrepo = store.repos?.find((repo: Repo) => repo.name === element);
-    result.push({ element: element, id: id++, url: resultrepo!.url });
-  });
+	id = 0;
+	const result: { element: string, id: number, url: string; }[] = [];
+	matchRepos(search.value, store.reponames).forEach((element: string) => {
+		const resultrepo = store.repos?.find((repo: Repo) => repo.name === element);
+		result.push({element, id: id++, url: resultrepo!.url});
+	});
 
-  return result;
+	return result;
 });
 
 function setRepo(name: string) {
+	for (const i in store.repos) {
+		if (store.repos[i].name === name) {
+			store.repo = store.repos[i];
+		}
+	}
 
-  for (const i in store.repos) {
-    if (store.repos[i].name === name) {
-      store.repo = store.repos[i];
-    }
-  }
-  search.value = "";
-  fetchRepo(store.repo, store.repo.default_branch).then(() => {
-    router.push({ name: 'Repo', params: { repoId: store.repo.id, accessCode: store.accessCode } });
-  });
+	search.value = '';
+	fetchRepo(store.repo!, store.repo!.default_branch).then(() => {
+		router.push({name: 'Repo', params: {repoId: store.repo!.id, accessCode: store.accessCode}});
+	});
 }
 </script>
 

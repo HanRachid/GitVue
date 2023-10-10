@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import gitIcon from "../assets/git.png";
+import {store} from '../api/repositories';
+import gitIcon from '../assets/git.png';
 </script>
 
 <template>
-  <section class="h-full bg-gradient-to-br from-blue-900 to-purple-600 md:bg-gradient-to-r">
+  <section
+    v-if="!store.logged"
+    class="h-full bg-gradient-to-br from-blue-900 to-purple-600 md:bg-gradient-to-r"
+  >
     <div class="grid py-8 px-4 mx-auto max-w-screen-xl lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12 h-full">
       <div class="place-self-center mr-auto lg:col-span-7">
         <h1 class="mb-4 max-w-2xl text-4xl font-extrabold leading-none md:text-5xl xl:text-6xl dark:text-white">
