@@ -1,7 +1,7 @@
+import process from 'node:process';
 import express from 'express';
 import cors from 'cors';
 import {getSession, getSessionCodeUrl} from './api/repositories.js';
-import process from 'process';
 
 const options = [
 	cors({

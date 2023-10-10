@@ -1,6 +1,6 @@
 import {Octokit} from 'octokit';
 import {reactive} from 'vue';
-import {User, type Branch, type Repo} from '../types';
+import {type User, type Branch, type Repo} from '../types';
 
 const url = 'https://rachid-handaoui-taas-frontend-challenge-2q61.vercel.app';
 
@@ -15,7 +15,7 @@ export const store = reactive<{
 	selectedBranch: Branch | undefined;
 	selectedCommits: Repo[];
 	accessCode: string | undefined;
-	user: User | undefined
+	user: User | undefined;
 }>({
 	repos: [],
 	branches: [],
@@ -31,7 +31,7 @@ export const store = reactive<{
 /**
  * Fetch all repos from user
  */
-export async function fetchRepos(token: string, path:string): Promise<Array<Record<string, unknown>>> {
+export async function fetchRepos(token: string, path: string): Promise<Array<Record<string, unknown>>> {
 	const octokit = new Octokit({
 		auth: token,
 	});
@@ -67,7 +67,7 @@ export async function getSessionCodeUrl() {
 
 	if (codeParameter) {
 		const response = await fetch(url + '/session/' + codeParameter);
-		const token:{token:string} = await response.json();
+		const token: {token: string} = await response.json();
 
 		return token.token;
 	}
@@ -119,8 +119,8 @@ export async function fetchFromLink(link: string): Promise<Array<Record<string, 
 export const fetchBranch = async (repo: Repo, sha: string): Promise<Array<Record<string, unknown>>> => {
 	const url
     = 'https://api.github.com/repos/' + repo.full_name + '/commits?sha=' + sha;
-	const res = await fetchFromLink(url);
-	return res;
+	const result = await fetchFromLink(url);
+	return result;
 };
 
 /**
@@ -132,9 +132,9 @@ export const fetchRepo = async (
 ): Promise<void> => {
 	const url = 'https://api.github.com/repos/' + repo.full_name + '/branches';
 
-	const res = await fetchFromLink(url);
+	const result = await fetchFromLink(url);
 	store.repo = repo;
-	res.forEach((result: Record<string, unknown>) => {
+	result.forEach((result: Record<string, unknown>) => {
 		const res = result as Branch;
 		if (res.name === defaultBranch) {
 			store.selectedBranch = res;
@@ -146,5 +146,5 @@ export const fetchRepo = async (
 		});
 	}
 
-	store.branches = res as Branch[];
+	store.branches = result as Branch[];
 };

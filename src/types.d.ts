@@ -23,6 +23,6 @@ export type Repo = {
 };
 
 export type User = {
-	login:string,
-	avatar_url : string
-}
+	login: string;
+	avatar_url: string;
+};
