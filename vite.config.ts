@@ -3,6 +3,6 @@ import vue from '@vitejs/plugin-vue';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-	base: '/rachid_handaoui-taas-frontend-challenge',
+	base: './rachid_handaoui-taas-frontend-challenge',
 	plugins: [vue()],
 });
