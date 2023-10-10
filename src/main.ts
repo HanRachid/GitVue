@@ -9,7 +9,7 @@ import WelcomePage from './pages/WelcomePage.vue';
 import LoginPage from './pages/LoginPage.vue';
 import './style.css';
 
-const baseUrl = '/rachid_handaoui-taas-frontend-challenge';
+export const baseUrl = '/rachid_handaoui-taas-frontend-challenge';
 const routes = [
 	{
 		path: baseUrl + '/:user',

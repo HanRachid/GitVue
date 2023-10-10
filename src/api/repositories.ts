@@ -1,6 +1,7 @@
 import {Octokit} from 'octokit';
 import {reactive} from 'vue';
 import {type User, type Branch, type Repo} from '../types';
+import {baseUrl} from '../main';
 
 const url = 'https://rachid-handaoui-taas-frontend-challenge-2q61.vercel.app';
 
@@ -99,7 +100,7 @@ export async function githubOauth() {
 export function logOut(): void {
 	store.logged = false;
 
-	window.location.assign('/');
+	window.location.assign(baseUrl);
 }
 
 /**
